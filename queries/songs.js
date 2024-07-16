@@ -18,6 +18,10 @@ const getSong = async (id) => {
   }
 };
 
+const getAllSongsOrdered = async () => {
+  const allSongs = await db.any("SELECT * FROM songs ORDER BY name ASC")
+  return allSongs
+}
 
 
 const createSong = async (song) => {
@@ -40,14 +44,18 @@ const deleteSong = async (id) => {
     );
     return deletedSong;
   } catch (error) {
-    return error;
+    if (error.received === 0) {
+      return null;
+    } else {
+      throw error;
+    }
   }
 };
 
 const updateSong = async (id, song) => {
   try {
     const updatedSong = await db.one(
-      "UPDATE songs SET name=$1, artist=$2, album=$3, time=$4, is_favorite=$5 where id=$6 RETURNING *",
+      "UPDATE songs SET name=$1, artist=$2, album=$3, time=$4, is_favorite=$5 WHERE id=$6 RETURNING *",
       [song.name, song.artist, song.album, song.time, song.is_favorite, id]
     );
     return updatedSong;
@@ -57,4 +65,4 @@ const updateSong = async (id, song) => {
 };
 
 
-module.exports = { getAllSongs, getSong, createSong, deleteSong, updateSong };
+module.exports = { getAllSongs, getSong, createSong, deleteSong, updateSong, getAllSongsOrdered };
