@@ -6,12 +6,12 @@ const checkName = (req, res, next) => {
     }
   };
 
-const checkArtist = (req, res, next) => {
-    if (req.body.artist) {
+const checkDescription = (req, res, next) => {
+    if (req.body.description) {
       next();
     } else {
-      res.status(400).json({ error: "Artist is required" });
+      res.status(400).json({ error: "Description is required" });
     }
   };
   
-  module.exports = {  checkName, checkArtist };
+  module.exports = {  checkName, checkDescription };
